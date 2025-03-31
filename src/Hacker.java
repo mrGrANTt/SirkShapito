@@ -12,6 +12,23 @@ public class Hacker {
     public final static int port = 123;
 
     public static void main(String[] args) {
+        /*
+        try {
+
+            BufferedImage img = ImageIO.read(new File("C:\\Users\\mrg\\Downloads\\vecteezy_ai-generated-watercolor-painting-of-bald-eagle_41330652.png"));
+
+            JFrame frame = new JFrame();
+            frame.getContentPane().setLayout(new FlowLayout());
+            frame.getContentPane().add(new JLabel(new ImageIcon(img)));
+            frame.pack();
+            frame.setVisible(true);
+
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        */
+
         try (
                 Socket sc = new Socket(ip, port);
         ) {
