@@ -1,14 +1,33 @@
 import java.io.*;
-import java.net.*;
+import java.net.Socket;
 
 public class Server1 {
-    public static void main (String[] args) throws IOException {
-        int port = 11111;
-        String server2Address = "127.0.0.1";
-        int server2Port = 12345;
+    private final static String sourceIp = "localhost";
+    private final static int sourcePort = 123;
 
-        try (ServerSocket serverSocket = new ServerSocket(port)){
-            Socket clientSocket = serverSocket.accept();
+    private final static String targetIp = "localhost";
+    private final static int targetPort = 456;
+
+    public static void main(String[] args) {
+        try (
+                Socket sourceSocket = new Socket(sourceIp, sourcePort);
+                BufferedReader sourceReader = new BufferedReader(new InputStreamReader(sourceSocket.getInputStream()));
+
+                Socket targetSocket = new Socket(targetIp, targetPort);
+                BufferedWriter targetWriter = new BufferedWriter(new OutputStreamWriter(targetSocket.getOutputStream()));
+        ) {
+            System.out.println("Connected to source and target servers. Starting data relay...");
+            String line;
+            while ((line = sourceReader.readLine()) != null) {
+                System.out.println("Received from source: " + line);
+                targetWriter.write(line);
+                targetWriter.newLine();
+                targetWriter.flush();
+                System.out.println("Relayed to target: " + line);
+            }
+            System.out.println("Source server closed the connection.");
+        } catch (IOException e) {
+            System.err.println("Error during data relay: " + e.getMessage());
         }
     }
 }
