@@ -3,8 +3,8 @@ import java.net.Socket;
 import java.net.ServerSocket;
 
 public class Server1 {
-    private final static int sourcePort = 123;
-    private final static int targetPort = 456;
+    private final static int targetPort= 123;
+    private final static int sourcePort = 456;
 
     public static void main(String[] args) {
         try (
