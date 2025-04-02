@@ -10,11 +10,15 @@ public class Server1 {
         try (
                 ServerSocket sourceSocket = new ServerSocket(sourcePort);
                 BufferedReader sourceReader = new BufferedReader(new InputStreamReader(sourceSocket.accept().getInputStream()));
+
+                ServerSocket targetSocket = new ServerSocket(targetPort);
+                BufferedWriter targetWriter = new BufferedWriter(new OutputStreamWriter(targetSocket.accept().getOutputStream()));
         ) {
             System.out.println("Connected to source and target servers. Starting data relay...");
             String line;
             while ((line = sourceReader.readLine()) != null) {
                 System.out.println("Received from source: " + line);
+                targetWriter.write(line);
             }
             System.out.println("Source server closed the connection.");
         } catch (IOException e) {
