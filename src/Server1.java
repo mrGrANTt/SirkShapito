@@ -19,6 +19,8 @@ public class Server1 {
             while ((line = sourceReader.readLine()) != null) {
                 System.out.println("Received from source: " + line);
                 targetWriter.write(line);
+                targetWriter.newLine();
+                targetWriter.flush();
             }
             System.out.println("Source server closed the connection.");
         } catch (IOException e) {
