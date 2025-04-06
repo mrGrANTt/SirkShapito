@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
 
@@ -12,7 +13,6 @@ public class Hacker {
     public final static int port = 123;
 
     public static void main(String[] args) {
-        /*
         try {
 
             BufferedImage img = ImageIO.read(new File("C:\\Users\\mrg\\Downloads\\vecteezy_ai-generated-watercolor-painting-of-bald-eagle_41330652.png"));
@@ -27,9 +27,8 @@ public class Hacker {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-        */
 
-        try (
+        /*try (
                 Socket sc = new Socket(ip, port);
         ) {
             System.out.println("Server connected. Waiting new msg...");
@@ -47,7 +46,7 @@ public class Hacker {
             }
         } catch (IOException e) {
             System.out.println("Client error: " + e.getMessage());
-        }
+        }*/
     }
 
     public static byte[] read(Socket sc) throws IOException {
