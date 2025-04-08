@@ -1,26 +1,19 @@
 package mrg;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
 public class ImagePanel extends JPanel {
     private BufferedImage image;
 
-    public ImagePanel(String path) {
-        updateImage(path);
+    public ImagePanel(BufferedImage bi) {
+        updateImage(bi);
     }
 
-    public void updateImage(String path) {
-        try {
-            image = ImageIO.read(new File(path));
-            repaint();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void updateImage(BufferedImage bi) {
+        image = bi;
+        repaint();
     }
 
     @Override

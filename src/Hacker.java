@@ -1,3 +1,5 @@
+import mrg.HackerFrame;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -16,15 +18,12 @@ public class Hacker {
         try {
 
             BufferedImage img = ImageIO.read(new File("C:\\Users\\mrg\\Downloads\\vecteezy_ai-generated-watercolor-painting-of-bald-eagle_41330652.png"));
+            HackerFrame hf = new HackerFrame();
 
-            JFrame frame = new JFrame();
-            frame.getContentPane().setLayout(new FlowLayout());
-            frame.getContentPane().add(new JLabel(new ImageIcon(img)));
-            frame.pack();
-            frame.setVisible(true);
+            Thread.sleep(3000);
+            hf.setImage(img);
 
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        } catch (IOException ex) {
+        } catch (IOException | InterruptedException ex) {
             ex.printStackTrace();
         }
 
