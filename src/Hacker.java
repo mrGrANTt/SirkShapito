@@ -1,12 +1,9 @@
 import mrg.HackerFrame;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
-import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
 
@@ -15,7 +12,7 @@ public class Hacker {
     public final static int port = 123;
 
     public static void main(String[] args) {
-        try {
+        /*try {
 
             BufferedImage img = ImageIO.read(new File("C:\\Users\\mrg\\Downloads\\vecteezy_ai-generated-watercolor-painting-of-bald-eagle_41330652.png"));
             HackerFrame hf = new HackerFrame();
@@ -25,27 +22,23 @@ public class Hacker {
 
         } catch (IOException | InterruptedException ex) {
             ex.printStackTrace();
-        }
-
-        /*try (
-                Socket sc = new Socket(ip, port);
-        ) {
-            System.out.println("Server connected. Waiting new msg...");
-            while (true) {
-                byte[] imgByte = read(sc);
-                BufferedImage img = ImageIO.read(new ByteArrayInputStream(imgByte));
-
-                JFrame frame = new JFrame();
-                frame.getContentPane().setLayout(new FlowLayout());
-                frame.getContentPane().add(new JLabel(new ImageIcon(img)));
-                frame.pack();
-                frame.setVisible(true);
-
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            }
-        } catch (IOException e) {
-            System.out.println("Client error: " + e.getMessage());
         }*/
+
+        System.out.println("Server connected. Waiting new msg...");
+        HackerFrame frame = new HackerFrame();
+
+        while (true) {
+            try (
+                    Socket sc = new Socket(ip, port);
+            ) {
+                    byte[] imgByte = read(sc);
+                    BufferedImage img = ImageIO.read(new ByteArrayInputStream(imgByte));
+
+                    frame.setImage(img);
+            } catch (IOException e) {
+                System.out.println("Client error: " + e.getMessage());
+            }
+        }
     }
 
     public static byte[] read(Socket sc) throws IOException {

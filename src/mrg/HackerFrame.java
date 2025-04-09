@@ -1,7 +1,11 @@
 package mrg;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 public class HackerFrame extends JFrame {
     private static Dimension dimension = new Dimension(1920, 1080);
