@@ -5,6 +5,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.Socket;
 
 public class Hacker {
@@ -12,25 +13,22 @@ public class Hacker {
     public final static int port = 123;
 
     public static void main(String[] args) {
-        System.out.println("Server connected. Waiting new msg...");
+        System.out.println("Server connecting. Please wait...");
         HackerFrame frame = new HackerFrame();
 
         while (true) {
-            byte[] imgByte;
             try (
                     Socket sc = new Socket(ip, port);
+                    InputStream in = sc.getInputStream();
             ) {
-                    imgByte = read(sc);
-            } catch (IOException e) {
-                imgByte = null;
-            }
-            if (imgByte != null) {
-                try {
-                    BufferedImage img = ImageIO.read(new ByteArrayInputStream(imgByte));
+                byte[] array = new byte[280 * 1024];
+
+                while (in.read(array) != -1) {
+                    BufferedImage img = ImageIO.read(new ByteArrayInputStream(array));
                     frame.setImage(img);
-                } catch (IOException ex) {
-                    System.out.println("Incorrectly image: " + ex.getMessage());
                 }
+            } catch (IOException e) {
+                System.out.println("Incorrectly image: " + e.getMessage());
             }
         }
     }
