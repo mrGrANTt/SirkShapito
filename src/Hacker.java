@@ -12,31 +12,25 @@ public class Hacker {
     public final static int port = 123;
 
     public static void main(String[] args) {
-        /*try {
-
-            BufferedImage img = ImageIO.read(new File("C:\\Users\\mrg\\Downloads\\vecteezy_ai-generated-watercolor-painting-of-bald-eagle_41330652.png"));
-            HackerFrame hf = new HackerFrame();
-
-            Thread.sleep(3000);
-            hf.setImage(img);
-
-        } catch (IOException | InterruptedException ex) {
-            ex.printStackTrace();
-        }*/
-
         System.out.println("Server connected. Waiting new msg...");
         HackerFrame frame = new HackerFrame();
 
         while (true) {
+            byte[] imgByte;
             try (
                     Socket sc = new Socket(ip, port);
             ) {
-                    byte[] imgByte = read(sc);
-                    BufferedImage img = ImageIO.read(new ByteArrayInputStream(imgByte));
-
-                    frame.setImage(img);
+                    imgByte = read(sc);
             } catch (IOException e) {
-                System.out.println("Client error: " + e.getMessage());
+                imgByte = null;
+            }
+            if (imgByte != null) {
+                try {
+                    BufferedImage img = ImageIO.read(new ByteArrayInputStream(imgByte));
+                    frame.setImage(img);
+                } catch (IOException ex) {
+                    System.out.println("Incorrectly image: " + ex.getMessage());
+                }
             }
         }
     }
