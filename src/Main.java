@@ -30,13 +30,9 @@ public class Main {
                 dos.writeInt(imageBytes.length);
                 outputStream.write(imageBytes);
                 outputStream.flush();
-                //todo: получать это с сервера для FPS
-                Thread.sleep(1000);
             }
         } catch (IOException e) {
             System.err.println("Error during data sending: " + e.getMessage());
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
         }
     }
 }
