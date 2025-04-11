@@ -27,7 +27,8 @@ public class Hacker {
                     byte[] bytes = new byte[length];
                     dataInputStream.readFully(bytes,0,length);
 
-                    BufferedImage img = ImageIO.read(new ByteArrayInputStream(array));
+                    BufferedImage img = ImageIO.read(new ByteArrayInputStream(bytes));
+
                     frame.setImage(img);
                 }
             } catch (IOException e) {
