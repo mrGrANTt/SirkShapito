@@ -21,7 +21,11 @@ public class Hacker {
                     Socket sc = new Socket(ip, port);
                     InputStream in = sc.getInputStream();
             ) {
-                byte[] array = new byte[280 * 1024];
+                DataInputStream dataInputStream = new DataInputStream(in);
+                int length = dataInputStream.readInt();
+                byte[] bytes = new byte[length];
+                dataInputStream.readFully(bytes,0,length);
+
 
                 while (in.read(array) != -1) {
                     BufferedImage img = ImageIO.read(new ByteArrayInputStream(array));
