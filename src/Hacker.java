@@ -1,6 +1,11 @@
-import java.io.BufferedReader;
+import mrg.HackerFrame;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.DataInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.InputStream;
 import java.net.Socket;
 
 public class Hacker {
@@ -8,18 +13,44 @@ public class Hacker {
     public final static int port = 123;
 
     public static void main(String[] args) {
-        try (
-                Socket sc = new Socket(ip, port);
-                BufferedReader in = new BufferedReader(new InputStreamReader(sc.getInputStream()));
-        ) {
-            System.out.println("Server connected. Waiting new msg...");
-            while (true) {
-                String serverResponse = in.readLine();
-                if (serverResponse != null)
-                    System.out.println("Server msg: " + serverResponse);
+        System.out.println("Server connecting. Please wait...");
+        HackerFrame frame = new HackerFrame();
+
+        while (true) {
+            try (
+                    Socket sc = new Socket(ip, port);
+                    InputStream in = sc.getInputStream();
+            ) {
+                DataInputStream dataInputStream = new DataInputStream(in);
+                int length = dataInputStream.readInt();
+                byte[] bytes = new byte[length];
+                dataInputStream.readFully(bytes,0,length);
+
+
+                while (in.read(array) != -1) {
+                    BufferedImage img = ImageIO.read(new ByteArrayInputStream(array));
+                    frame.setImage(img);
+                }
+            } catch (IOException e) {
+                System.out.println("Incorrectly image: " + e.getMessage());
             }
-        } catch (IOException e) {
-            System.out.println("Client error: " + e.getMessage());
         }
     }
+
+    public static byte[] read(Socket sc) throws IOException {
+        byte[] array = new byte[280 * 1024];
+        int arrayPointer = 0;
+        DataInputStream din = new DataInputStream(sc.getInputStream());
+        byte[] buffer = new byte[2048];
+        int readCount;
+
+        while ((readCount = din.read(buffer)) != -1) {
+            System.arraycopy(buffer, 0, array, arrayPointer, readCount);
+            arrayPointer += readCount;
+        }
+        return array;
+    }
 }
+
+
+// 211968b - 1920x1080 - ~207kb
