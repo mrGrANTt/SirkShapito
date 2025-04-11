@@ -1,10 +1,11 @@
+import javax.xml.crypto.Data;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Server1 {
-    private final static int targetPort = 123;
-    private final static int sourcePort = 456;
+    private final static int targetPort = 123; // Порт для целевого клиента
+    private final static int sourcePort = 456; // Порт для исходного клиента
 
     private static Socket targetClient;
 
@@ -15,6 +16,7 @@ public class Server1 {
         ) {
             System.out.println("Запуск сервера. Ожидание подключений...");
 
+            // Поток для подключения целевого клиента
             new Thread(() -> {
                 try {
                     targetClient = targetServerSocket.accept();
@@ -24,30 +26,35 @@ public class Server1 {
                 }
             }).start();
 
+            // Подключение исходного клиента
             Socket sourceClient = sourceServerSocket.accept();
             System.out.println("Исходный клиент подключён.");
 
             try (
-                    BufferedReader sourceReader = new BufferedReader(new InputStreamReader(sourceClient.getInputStream()));
+                    InputStream sourceInput = sourceClient.getInputStream(); // Получение данных от исходного клиента
             ) {
                 System.out.println("Начало ретрансляции данных...");
-                String line;
+
+                if (targetClient == null)
+                    System.out.println("Ожидание подключения целевого клиента...");
 
                 while (targetClient == null) {
-                    System.out.println("Ожидание подключения целевого клиента...");
                     Thread.sleep(100);
                 }
 
-                BufferedWriter targetWriter = new BufferedWriter(new OutputStreamWriter(targetClient.getOutputStream()));
+                OutputStream targetOutput = targetClient.getOutputStream();
+                while (true) {
+                    DataInputStream dataInputStream = new DataInputStream(sourceInput);
+                    int length = dataInputStream.readInt();
+                    byte[] bytes = new byte[length];
+                    dataInputStream.readFully(bytes,0,length);
 
-                while ((line = sourceReader.readLine()) != null) {
-                    System.out.println("Получено из источника: " + line);
-                    targetWriter.write(line);
-                    targetWriter.newLine();
-                    targetWriter.flush();
+                    DataOutputStream dos = new DataOutputStream(targetOutput);
+                    dos.writeInt(length);
+                    targetOutput.write(bytes);
+                    targetOutput.flush();
                 }
-                targetWriter.close();
-                System.out.println("Исходный клиент закрыл соединение.");
+                //System.out.println("Исходный клиент закрыл соединение.");
             } catch (IOException | InterruptedException e) {
                 System.err.println("Ошибка при передаче данных: " + e.getMessage());
             } finally {
